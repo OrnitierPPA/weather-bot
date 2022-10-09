@@ -23,6 +23,7 @@ async def native_city_create(state, user_id):
 
 async def native_city_sqlite(user):
     global nat_city, area
+    
     cur = db.cursor()
 
     data_native = cur.execute(f"SELECT * FROM native_city WHERE user_id = {user}")

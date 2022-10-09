@@ -20,36 +20,41 @@ async def on_startup(_):
 async def native_city_conclusion(mode, callback_query: types.CallbackQuery):
 
     user = callback_query.from_user.id
-    await database.native_city_sqlite(user)
+    try:
+        await database.native_city_sqlite(user)
 
-    city(database.nat_city, mode, database.area)
+        city(database.nat_city, mode, database.area)
 
-    if mode.lower() == 'завтра':
-        with open('weather_tomorrow.json',  encoding='utf-8') as file:
-            data_weather = json.load(file)
+        if mode.lower() == 'завтра':
+            with open('weather_tomorrow.json',  encoding='utf-8') as file:
+                data_weather = json.load(file)
 
-            for k, v in data_weather.items():
-                weather_data = f"{k}: {v}"
+                for k, v in data_weather.items():
+                    weather_data = f"{k}: {v}"
 
-                await bot.send_message(user, weather_data)
-    
-    elif mode.lower() == 'сегодня':
-        with open('weather_today.json',  encoding='utf-8') as file:
-            data_weather = json.load(file)
+                    await bot.send_message(user, weather_data)
+        
+        elif mode.lower() == 'сегодня':
+            with open('weather_today.json',  encoding='utf-8') as file:
+                data_weather = json.load(file)
 
-            for k, v in data_weather.items():
-                weather_data = f"{k}: {v}"
+                for k, v in data_weather.items():
+                    weather_data = f"{k}: {v}"
 
-                await bot.send_message(user, weather_data)
+                    await bot.send_message(user, weather_data)
 
-    elif mode.lower() == 'месяц':
-        with open('weather_30day.json',  encoding='utf-8') as file:
-            data_weather = json.load(file)
+        elif mode.lower() == 'месяц':
+            with open('weather_30day.json',  encoding='utf-8') as file:
+                data_weather = json.load(file)
 
-            for k, v in data_weather.items():
-                weather_data = f"{k}: {v}"
+                for k, v in data_weather.items():
+                    weather_data = f"{k}: {v}"
 
-                await bot.send_message(user, weather_data)
+                    await bot.send_message(user, weather_data)
+
+    except Exception as _ex:
+
+        return await bot.send_message(user, "Вас нет в базе данных.")
 
 @dp.message_handler(commands=['start'], state = None)
 async def send_welcome(message: types.Message):
